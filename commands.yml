@@ -1,0 +1,12 @@
+commands:
+  code:
+    prompt: "I want you to analyze my code and how to make it cleaner and more efficient. You are a highly competent engineer at Google. Tell me about potential improvements in the code and directly provide inline suggestions for code changes you would make. Also describe what it does, and give it a rating out of 10. This is the code: \n$!arg1"
+    desc: Analyze your code.
+  label:
+    prompt: "I want you to label this text with salient themes, ideas or concepts. Also give it a title. Text: $!file \n Labels: "
+    args:
+      file: The file you want to label
+  text2unix:
+    prompt: "I want to !arg1. You are an experienced command line user. Translate this into a Unix command:"
+  writing:
+    prompt: "I am writing something and I want feedback. You are an experienced writer who won a Pulitzer prize. Give me feedback and direct suggestions on the writing, and give it a title. Incorporate direct suggestions and give it a rating out of 10. Writing: \n $!arg1"
