@@ -2,6 +2,7 @@
 from argparse import ArgumentParser
 import re
 import os
+import sys
 from pathlib import Path
 import yaml
 
@@ -27,13 +28,16 @@ if not config_path.exists():
     config_path.parent.mkdir(parents=True, exist_ok=True)
     with open(config_path, "w") as f:
         yaml.dump({"commands": {"example": sample_command}, "key": ""}, f)
-print(f"You need to put your OpenAI API in {config_path}")
 
 with Path("~/.local/share/gpt_cli/config.yml").expanduser().open() as f:
     config = yaml.safe_load(f)
 
 # init prompt chain
 os.environ["OPENAI_API_KEY"] = config["key"]
+if not "key" in config or not config["key"]:
+    print("You need to set your OpenAI API key in ~/.local/share/gpt_cli/config.yml")
+    sys.exit(1)
+
 TEMPLATE = """Assistant is a large language model trained by OpenAI.
 
 Assistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
