@@ -1,3 +1,6 @@
-GPT_cli.egg-info
-gpt_cli/__pycache__/
+GPT_prompts.egg-info
+gpt_prompts/__pycache__/
 __pycache__/
+build/
+dist/
+

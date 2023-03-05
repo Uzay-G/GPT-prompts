@@ -1,6 +1,27 @@
-# GPT-cli
+# GPT-prompts
 
-GPT-cli is a simple command line tool that allows you to write extensible ChatGPT prompt templates for different use cases.
+GPT-prompts is a simple command line tool that allows you to write extensible ChatGPT prompt templates for different use cases, and then call them from your terminal.
+
+# Install
+
+```
+pip install ChatGPT-cli
+```
+
+# Usage:
+
+```
+usage: GPT [-h] {commands} ...
+
+A flexible interface to ChatGPT that allows you to easily define prompt
+templates and extensible commands
+
+positional arguments:
+{commands}
+
+options:
+  -h, --help            show this help message and exit
+```
 
 You can specify templates and commands you want by calling `GPT configure`, and editing that file. This is the config template for a user that just has one command which labels a file.
 
@@ -27,3 +48,4 @@ commands:
 ```
 
 You can see some more example prompt templates in `commands.yml`. If you make any cool/useful ones, open a pull request and I might add it!
+
