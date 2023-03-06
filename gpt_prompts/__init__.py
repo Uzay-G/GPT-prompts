@@ -65,7 +65,7 @@ def enter_chat():
         r_prompt = input(">>> ")
         if r_prompt == "exit":
             break
-        llm(prompt=r_prompt)
+        print(llm.predict(prompt=r_prompt))
 
 
 parser = subparsers.add_parser(
@@ -85,7 +85,7 @@ def main():
     args = cli.parse_args()
     if args.subcommand is None:
         cli.print_help()
-        llm.predict(prompt="Hello!")
+        print(llm.predict(prompt="Hello!"))
         enter_chat()
     elif args.subcommand == "configure":
         editor = os.environ.get("EDITOR", "vim")
@@ -99,5 +99,5 @@ def main():
             prompt = prompt.replace(f"!{arg}", val)
         # match all file calls by searching for occurences of $filename
         prompt = re.sub(r"\$(\S+)", file_replace, prompt)
-        llm.predict(prompt=prompt)
+        print(llm.predict(prompt=prompt))
         enter_chat()
