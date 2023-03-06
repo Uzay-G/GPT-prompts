@@ -6,8 +6,19 @@ import sys
 from pathlib import Path
 import yaml
 
-from langchain import OpenAI, LLMChain, PromptTemplate
-from langchain.chains.conversation.memory import ConversationalBufferWindowMemory
+from langchain.chat_models import ChatOpenAI
+from langchain import PromptTemplate
+from langchain.prompts.chat import (
+    ChatPromptTemplate,
+    SystemMessagePromptTemplate,
+    AIMessagePromptTemplate,
+    HumanMessagePromptTemplate,
+)
+from langchain.schema import (
+    AIMessage,
+    HumanMessage,
+    SystemMessage
+)
 
 # init CLI
 cli = ArgumentParser(
@@ -38,34 +49,14 @@ if not "key" in config or not config["key"]:
     print("You need to set your OpenAI API key in ~/.local/share/gpt_cli/config.yml")
     sys.exit(1)
 
-TEMPLATE = """Assistant is a large language model trained by OpenAI.
-
-Assistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
-
-Assistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
-
-Overall, Assistant is a powerful tool that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether you need help with a specific question or just want to have a conversation about a particular topic, Assistant is here to assist.
-
-{history}
-Human: {prompt}
-Assistant:"""
-
-prompt = PromptTemplate(input_variables=["history", "prompt"], template=TEMPLATE)
-
-llm = LLMChain(
-    llm=OpenAI(temperature=0),
-    prompt=prompt,
-    verbose=True,
-    memory=ConversationalBufferWindowMemory(k=2),
-)
-
+chat = ChatOpenAI(temperature=0)
 
 def enter_chat():
     while True:
         r_prompt = input(">>> ")
         if r_prompt == "exit":
             break
-        print(llm.predict(prompt=r_prompt))
+        print(prompt_chat(r_prompt))
 
 
 parser = subparsers.add_parser(
@@ -81,11 +72,14 @@ for name, command in config["commands"].items():
         parser.add_argument(arg)
     parser.set_defaults(name=name)
 
+def prompt_chat(prompt):
+    return chat([HumanMessage(content=prompt)]).content
+
 def main():
     args = cli.parse_args()
     if args.subcommand is None:
         cli.print_help()
-        print(llm.predict(prompt="Hello!"))
+        print(prompt_chat("Hello"))
         enter_chat()
     elif args.subcommand == "configure":
         editor = os.environ.get("EDITOR", "vim")
@@ -99,5 +93,5 @@ def main():
             prompt = prompt.replace(f"!{arg}", val)
         # match all file calls by searching for occurences of $filename
         prompt = re.sub(r"\$(\S+)", file_replace, prompt)
-        print(llm.predict(prompt=prompt))
+        print(prompt_chat(prompt))
         enter_chat()
