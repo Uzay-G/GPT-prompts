@@ -5,7 +5,7 @@ GPT-prompts is a simple command line tool that allows you to write extensible Ch
 # Install
 
 ```
-pip install ChatGPT-cli
+pip install gpt-prompts
 ```
 
 # Usage:
